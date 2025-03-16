@@ -1,5 +1,7 @@
 package com.nonpolynomial.btleplug.android.impl;
 
+import static android.content.ContentValues.TAG;
+
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -8,6 +10,7 @@ import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothGattService;
+import android.util.Log;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -69,7 +72,6 @@ class Peripheral {
                         try {
                             this.setCommandCallback(callback);
                             this.gatt = this.device.connectGatt(null, false, this.callback);
-                            this.gatt.requestMtu(50);
                         } catch (SecurityException ex) {
                             throw new PermissionDeniedException(ex);
                         }
@@ -463,12 +465,15 @@ class Peripheral {
     }
 
     private class Callback extends BluetoothGattCallback {
+        @SuppressLint("MissingPermission")
         @Override
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
             synchronized (Peripheral.this) {
                 switch (newState) {
                     case BluetoothGatt.STATE_CONNECTED:
                         Peripheral.this.connected = true;
+                        // TODD: move this to on connected
+                        gatt.requestMtu(50);
                         break;
                     case BluetoothGatt.STATE_DISCONNECTED:
                         Peripheral.this.connected = false;
@@ -486,6 +491,11 @@ class Peripheral {
                     Peripheral.this.adapter.onConnectionStateChanged(Peripheral.this.device.getAddress(), false);
                     break;
             }
+        }
+
+        @Override
+        public void onMtuChanged(BluetoothGatt gatt, int mtu, int status) {
+            Log.i(TAG, "Set MTU to: " + mtu);
         }
 
         @Override
