@@ -69,6 +69,7 @@ class Peripheral {
                         try {
                             this.setCommandCallback(callback);
                             this.gatt = this.device.connectGatt(null, false, this.callback);
+                            this.gatt.requestMtu(50);
                         } catch (SecurityException ex) {
                             throw new PermissionDeniedException(ex);
                         }
