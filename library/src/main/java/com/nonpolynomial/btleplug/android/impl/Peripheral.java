@@ -135,6 +135,13 @@ class Peripheral {
                     }
 
                     BluetoothGattCharacteristic characteristic = this.getCharacteristicByUuid(uuid);
+
+                    gatt.setCharacteristicNotification(characteristic,true);
+
+                    BluetoothGattDescriptor bluetoothGattDescriptor = characteristic.getDescriptors().get(0);
+                    bluetoothGattDescriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+                    gatt.writeDescriptor(bluetoothGattDescriptor);
+
                     this.setCommandCallback(new CommandCallback() {
                         @Override
                         public void onCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
@@ -162,9 +169,6 @@ class Peripheral {
                         }
                     });
 
-                    if (!gatt.setCharacteristicNotification(characteristic, true)) {
-                        throw new RuntimeException("Unable to set characteristic notification");
-                    }
 
                     if (!this.gatt.readCharacteristic(characteristic)) {
                         throw new RuntimeException("Unable to read characteristic");
@@ -333,6 +337,9 @@ class Peripheral {
 
     @SuppressLint("MissingPermission")
     public Future<byte[]> readDescriptor(UUID characteristic, UUID uuid) {
+
+
+
         SimpleFuture<byte[]> future = new SimpleFuture<>();
         synchronized (this) {
             this.queueCommand(() -> {
