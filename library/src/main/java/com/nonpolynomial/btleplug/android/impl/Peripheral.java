@@ -161,6 +161,11 @@ class Peripheral {
                             });
                         }
                     });
+
+                    if (!gatt.setCharacteristicNotification(characteristic, true)) {
+                        throw new RuntimeException("Unable to set characteristic notification");
+                    }
+
                     if (!this.gatt.readCharacteristic(characteristic)) {
                         throw new RuntimeException("Unable to read characteristic");
                     }
