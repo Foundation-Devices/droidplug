@@ -134,13 +134,13 @@ class Peripheral {
                         throw new NotConnectedException();
                     }
 
-                    BluetoothGattCharacteristic characteristic = this.getCharacteristicByUuid(uuid);
-
-                    gatt.setCharacteristicNotification(characteristic,true);
-
-                    BluetoothGattDescriptor bluetoothGattDescriptor = characteristic.getDescriptors().get(0);
-                    bluetoothGattDescriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
-                    gatt.writeDescriptor(bluetoothGattDescriptor);
+//                    BluetoothGattCharacteristic characteristic = this.getCharacteristicByUuid(uuid);
+//
+//                    gatt.setCharacteristicNotification(characteristic,true);
+//
+//                    BluetoothGattDescriptor bluetoothGattDescriptor = characteristic.getDescriptors().get(0);
+//                    bluetoothGattDescriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+//                    gatt.writeDescriptor(bluetoothGattDescriptor);
 
                     this.setCommandCallback(new CommandCallback() {
                         @Override
@@ -337,9 +337,6 @@ class Peripheral {
 
     @SuppressLint("MissingPermission")
     public Future<byte[]> readDescriptor(UUID characteristic, UUID uuid) {
-
-
-
         SimpleFuture<byte[]> future = new SimpleFuture<>();
         synchronized (this) {
             this.queueCommand(() -> {
