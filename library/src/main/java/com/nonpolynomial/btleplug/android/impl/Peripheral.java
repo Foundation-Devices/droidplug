@@ -134,7 +134,7 @@ class Peripheral {
                         throw new NotConnectedException();
                     }
 
-//                    BluetoothGattCharacteristic characteristic = this.getCharacteristicByUuid(uuid);
+                    BluetoothGattCharacteristic characteristic = this.getCharacteristicByUuid(uuid);
 //
 //                    gatt.setCharacteristicNotification(characteristic,true);
 //
