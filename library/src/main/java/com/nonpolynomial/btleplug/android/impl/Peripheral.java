@@ -485,7 +485,7 @@ class Peripheral {
                     case BluetoothGatt.STATE_CONNECTED:
                         Peripheral.this.connected = true;
                         // TODD: move this to on connected
-                        gatt.requestMtu(50);
+                        gatt.requestMtu(244);
                         break;
                     case BluetoothGatt.STATE_DISCONNECTED:
                         Peripheral.this.connected = false;
